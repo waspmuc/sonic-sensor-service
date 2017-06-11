@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "0.0.2",
-    "title": "Sonic Sensor Service"
+    "version": "0.0.4",
+    "title": "Sonic Sensor Service on RaspberryPi"
   },
   "host": "localhost:10010",
   "basePath": "/",

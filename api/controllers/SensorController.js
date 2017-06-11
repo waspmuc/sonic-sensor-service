@@ -22,6 +22,8 @@ var Board = GrovePi.board
 /* Access sonic sensor module */
 var UltrasonicDigitalSensor = GrovePi.sensors.UltrasonicDigital
 
+var init = false;
+
 /*
  Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
 
@@ -44,11 +46,9 @@ module.exports = {
   Param 1: a handle to the request object
   Param 2: a handle to the response object
  */
-function getSensorData(req, res) {
-  // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
-  var value = util.format('42');
-    //ToDo: Write sensor logic here
+var value;
 
+function getSensorData(req, res) {
 
     var board = new Board({
         debug: true,
@@ -56,25 +56,24 @@ function getSensorData(req, res) {
             console.log('Something wrong just happened')
             console.log(err)
         },
-        onInit: function(res) {
-            if (res) {
+        onInit: function(response) {
+            if (response) {
                 console.log('GrovePi Version :: ' + board.version())
-
-
-                //var lightSensor = new LightAnalogSensor(2)
                 var ultraSonicSensor = new UltrasonicDigitalSensor(2)
-
-                console.log('Super Sonic Sensor (start watch)')
+                console.log('Ultrasonic Ranger Digital Sensor (start watch)')
                 ultraSonicSensor.on('change', function(res) {
-                    console.log('Super Sonic Sensor onChange value=' + res)
+                    console.log('Ultrasonic Ranger onChange value=' + res)
                     value = res;
                 })
                 ultraSonicSensor.watch()
             }
         }
     })
-
-
+   if(init == false){
+       board.init();
+       init = true;
+   }
+    
   // this sends back a JSON response which is a single string
   res.json(value);
 }
