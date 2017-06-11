@@ -11,7 +11,7 @@ var config = {
   appRoot: __dirname // required config
 };
 
-app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 SwaggerExpress.create(config, function(err, swaggerExpress) {
   if (err) { throw err; }

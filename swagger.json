@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "0.0.1",
+    "version": "0.0.2",
     "title": "Sonic Sensor Service"
   },
   "host": "localhost:10010",
@@ -17,35 +17,6 @@
     "application/json"
   ],
   "paths": {
-    "/hello": {
-      "get": {
-        "description": "Returns 'Hello' to the caller",
-        "operationId": "sensor",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "The name of the person to whom to say sensor",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/HelloWorldResponse"
-            }
-          },
-          "default": {
-            "description": "Error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      }
-    },
     "/data": {
       "get": {
         "description": "Returns current value of the sonic sensor to the caller",
@@ -69,16 +40,6 @@
     "/swagger": {}
   },
   "definitions": {
-    "HelloWorldResponse": {
-      "required": [
-        "message"
-      ],
-      "properties": {
-        "message": {
-          "type": "string"
-        }
-      }
-    },
     "sensorResponse": {
       "required": [
         "message"
