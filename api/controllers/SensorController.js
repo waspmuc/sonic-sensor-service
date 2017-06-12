@@ -12,6 +12,9 @@
  */
 var util = require('util');
 
+/* Add Hashmap functionality to JavaScript */
+var HashMap = require('hashmap');
+
 /* Add sonic sensor module */
 var GrovePi = require('node-grovepi').GrovePi
 
@@ -23,6 +26,8 @@ var Board = GrovePi.board
 var UltrasonicDigitalSensor = GrovePi.sensors.UltrasonicDigital
 
 var init = false;
+
+const sampleSize = 3;
 
 /*
  Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
@@ -46,7 +51,8 @@ module.exports = {
   Param 1: a handle to the request object
   Param 2: a handle to the response object
  */
-var value;
+var value
+var ultraSonicSensor1, ultraSonicSensor2
 
 function getSensorData(req, res) {
 
@@ -59,21 +65,35 @@ function getSensorData(req, res) {
         onInit: function(response) {
             if (response) {
                 console.log('GrovePi Version :: ' + board.version())
-                var ultraSonicSensor = new UltrasonicDigitalSensor(2)
-                console.log('Ultrasonic Ranger Digital Sensor (start watch)')
-                ultraSonicSensor.on('change', function(res) {
-                    console.log('Ultrasonic Ranger onChange value=' + res)
-                    value = res;
-                })
-                ultraSonicSensor.watch()
+                ultraSonicSensor1 = new UltrasonicDigitalSensor(2)
+                ultraSonicSensor2 = new UltrasonicDigitalSensor(3)
+
             }
         }
     })
+
    if(init == false){
        board.init();
        init = true;
    }
-    
-  // this sends back a JSON response which is a single string
-  res.json(value);
+
+
+    var avgSensor1 = 0;
+    var avgSensor2 = 0;
+
+    for (var i = 0; i < sampleSize; i++) {
+        avgSensor1 += ultraSonicSensor1.read()
+        avgSensor2 += ultraSonicSensor2.read()
+    }
+
+    avgSensor1 = avgSensor1 / sampleSize
+    avgSensor2 = avgSensor2 / sampleSize
+
+    avgSensor1 = Math.round(avgSensor1)
+    avgSensor2 = Math.round(avgSensor2)
+
+
+    var dataStr = [{"sensor1" : avgSensor1, "sensor2" : avgSensor2}]
+
+    res.json(dataStr)
 }
