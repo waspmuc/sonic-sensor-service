@@ -12,9 +12,6 @@
  */
 var util = require('util');
 
-/* Add Hashmap functionality to JavaScript */
-var HashMap = require('hashmap');
-
 /* Add sonic sensor module */
 var GrovePi = require('node-grovepi').GrovePi
 
