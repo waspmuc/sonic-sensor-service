@@ -24,7 +24,7 @@ var UltrasonicDigitalSensor = GrovePi.sensors.UltrasonicDigital
 
 var init = false;
 
-const sampleSize = 3;
+const sampleSize = 2;
 
 /*
  Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
@@ -49,7 +49,7 @@ module.exports = {
   Param 2: a handle to the response object
  */
 var value
-var ultraSonicSensor1, ultraSonicSensor2
+var ultraSonicSensor1, ultraSonicSensor2, ultraSonicSensor3, ultraSonicSensor4
 
 function getSensorData(req, res) {
 
@@ -64,6 +64,8 @@ function getSensorData(req, res) {
                 console.log('GrovePi Version :: ' + board.version())
                 ultraSonicSensor1 = new UltrasonicDigitalSensor(2)
                 ultraSonicSensor2 = new UltrasonicDigitalSensor(3)
+                ultraSonicSensor3 = new UltrasonicDigitalSensor(4)
+                ultraSonicSensor4 = new UltrasonicDigitalSensor(8)
 
             }
         }
@@ -77,20 +79,28 @@ function getSensorData(req, res) {
 
     var avgSensor1 = 0;
     var avgSensor2 = 0;
+    var avgSensor3 = 0;
+    var avgSensor4 = 0;
 
     for (var i = 0; i < sampleSize; i++) {
         avgSensor1 += ultraSonicSensor1.read()
         avgSensor2 += ultraSonicSensor2.read()
+        avgSensor3 += ultraSonicSensor3.read()
+        avgSensor4 += ultraSonicSensor4.read()
     }
 
     avgSensor1 = avgSensor1 / sampleSize
     avgSensor2 = avgSensor2 / sampleSize
+    avgSensor3 = avgSensor3 / sampleSize
+    avgSensor4 = avgSensor4 / sampleSize
 
     avgSensor1 = Math.round(avgSensor1)
     avgSensor2 = Math.round(avgSensor2)
+    avgSensor3 = Math.round(avgSensor3)
+    avgSensor4 = Math.round(avgSensor4)
 
 
-    var dataStr = [{"sensor1" : avgSensor1, "sensor2" : avgSensor2}]
+    var dataStr = [{"sensor1" : avgSensor1, "sensor2" : avgSensor2, "sensor3" : avgSensor3, "sensor4" : avgSensor4}]
 
     res.json(dataStr)
 }
