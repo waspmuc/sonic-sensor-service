@@ -98,7 +98,7 @@ function getSensorData(req, res) {
     avgSensor4 = Math.round(avgSensor4)
 
 
-    var dataStr = [{"sensor1" : avgSensor1, "sensor2" : avgSensor2, "sensor3" : avgSensor3, "sensor4" : avgSensor4}]
+    var dataStr = [{"sonicsensor1" : avgSensor1, "sonicsensor2" : avgSensor2, "sonicsensor3" : avgSensor3, "sonicsensor4" : avgSensor4}]
 
     res.json(dataStr)
 }
