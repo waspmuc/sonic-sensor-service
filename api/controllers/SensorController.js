@@ -21,7 +21,6 @@ var Board = GrovePi.board
 
 /* Access sonic sensor module */
 var UltrasonicDigitalSensor = GrovePi.sensors.UltrasonicDigital
-
 var init = false;
 
 const sampleSize = 2;
@@ -50,6 +49,7 @@ module.exports = {
  */
 var value
 var ultraSonicSensor1, ultraSonicSensor2, ultraSonicSensor3, ultraSonicSensor4
+var lightSensor
 
 function getSensorData(req, res) {
 
@@ -66,7 +66,6 @@ function getSensorData(req, res) {
                 ultraSonicSensor2 = new UltrasonicDigitalSensor(3)
                 ultraSonicSensor3 = new UltrasonicDigitalSensor(4)
                 ultraSonicSensor4 = new UltrasonicDigitalSensor(8)
-
             }
         }
     })
@@ -76,11 +75,10 @@ function getSensorData(req, res) {
        init = true;
    }
 
-
-    var avgSensor1 = 0;
-    var avgSensor2 = 0;
-    var avgSensor3 = 0;
-    var avgSensor4 = 0;
+    var avgSensor1 = 0
+    var avgSensor2 = 0
+    var avgSensor3 = 0
+    var avgSensor4 = 0
 
     for (var i = 0; i < sampleSize; i++) {
         avgSensor1 += ultraSonicSensor1.read()
