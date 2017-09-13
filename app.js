@@ -20,7 +20,9 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   swaggerExpress.register(app);
 
   var port = process.env.PORT || 10010;
-  app.listen(port);
+  app.listen(port, function(){
+    console.log("Sonic-Sensor-Service is now running at 127.0.0.1:" + port)
+    });
 
 //  if (swaggerExpress.runner.swagger.paths['/sensor']) {
 //    console.log('try this:\ncurl http://127.0.0.1:' + port + '/sensor?name=Scott');
