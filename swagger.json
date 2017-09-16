@@ -4,7 +4,7 @@
     "version": "0.0.4",
     "title": "Sonic Sensor Service on RaspberryPi"
   },
-  "host": "192.168.232.36/sonicsensor",
+  "host": "192.168.232.36/sonicsensor/",
   "basePath": "/",
   "schemes": [
     "http",
