@@ -10,8 +10,10 @@
   "dependencies": {
     "express": "^4.12.3",
     "node-grovepi": "^2.1.1",
+    "sleep": "^5.1.1",
     "swagger-express-mw": "^0.1.0",
-    "swagger-ui-express": "^2.0.0"
+    "swagger-ui-express": "^2.0.0",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "should": "^7.1.0",

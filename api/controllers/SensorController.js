@@ -15,6 +15,8 @@ var util = require('util');
 /* Add sonic sensor module */
 var GrovePi = require('node-grovepi').GrovePi
 
+var sleep = require('sleep');
+
 /* Add base classes */
 var Commands = GrovePi.commands
 var Board = GrovePi.board
@@ -99,8 +101,11 @@ board.init();
 setInterval(function () {
     console.log("Accessing sensors.")
     sensor1 = Math.round(ultraSonicSensor1.read());
+    sleep.msleep(1000);
     sensor2 = Math.round(ultraSonicSensor2.read());
+    sleep.msleep(1000);
     sensor3 = Math.round(ultraSonicSensor3.read());
+    sleep.msleep(1000);
     sensor4 = Math.round(ultraSonicSensor4.read());
 }, 1000);
 
