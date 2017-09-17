@@ -1,12 +1,17 @@
 'use strict';
 
-var SwaggerExpress = require('swagger-express-mw');
-var app = require('express')();
+
+const SwaggerExpress = require('swagger-express-mw');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+const app = require('express')();
 module.exports = app; // for testing
 
 var config = {
   appRoot: __dirname // required config
 };
+
+app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 SwaggerExpress.create(config, function(err, swaggerExpress) {
   if (err) { throw err; }
@@ -15,9 +20,11 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   swaggerExpress.register(app);
 
   var port = process.env.PORT || 10010;
-  app.listen(port);
+  app.listen(port, function(){
+    console.log("Sonic-Sensor-Service is now running at 127.0.0.1:" + port)
+    });
 
-  if (swaggerExpress.runner.swagger.paths['/hello']) {
-    console.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Scott');
-  }
+//  if (swaggerExpress.runner.swagger.paths['/sensor']) {
+//    console.log('try this:\ncurl http://127.0.0.1:' + port + '/sensor?name=Scott');
+//  }
 });
