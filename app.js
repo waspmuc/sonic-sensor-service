@@ -5,6 +5,8 @@ const SwaggerExpress = require('swagger-express-mw');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const app = require('express')();
+const req = require('require-yml')
+const envConfig = req('./config.yml')
 module.exports = app; // for testing
 
 var config = {
@@ -19,12 +21,9 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   // install middleware
   swaggerExpress.register(app);
 
-  var port = process.env.PORT || 10010;
+  console.log("Config is " + envConfig.application.port);
+  var port = envConfig.application.port || 10010;
   app.listen(port, function(){
     console.log("Sonic-Sensor-Service is now running at 127.0.0.1:" + port)
     });
-
-//  if (swaggerExpress.runner.swagger.paths['/sensor']) {
-//    console.log('try this:\ncurl http://127.0.0.1:' + port + '/sensor?name=Scott');
-//  }
 });

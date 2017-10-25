@@ -17,13 +17,18 @@ var GrovePi = require('node-grovepi').GrovePi
 
 var sleep = require('sleep');
 
+var Worker = require('webworker-threads').Worker;
+
 /* Add base classes */
 var Commands = GrovePi.commands
 var Board = GrovePi.board
 
 /* Access sonic sensor module */
-var UltrasonicDigitalSensor = GrovePi.sensors.UltrasonicDigital
+var UltrasonicDigitalSensor = GrovePi.sensors.UltrasonicDigital;
 var init = false;
+
+const req = require('require-yml')
+const envConfig = req('./config.yml')
 
 /*
  Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
@@ -47,8 +52,9 @@ module.exports = {
  Param 1: a handle to the request object
  Param 2: a handle to the response object
  */
-var ultraSonicSensor1, ultraSonicSensor2, ultraSonicSensor3, ultraSonicSensor4;
-var sensor1, sensor2, sensor3, sensor4;
+var ultraSonicSensor1;
+var sensor1;
+var data1;
 
 var board = new Board({
     debug: true,
@@ -59,64 +65,61 @@ var board = new Board({
     onInit: function (response) {
         if (response) {
             console.log('GrovePi Version :: ' + board.version());
-            ultraSonicSensor1 = new UltrasonicDigitalSensor(2);
-            ultraSonicSensor2 = new UltrasonicDigitalSensor(3);
-            ultraSonicSensor3 = new UltrasonicDigitalSensor(4);
-            ultraSonicSensor4 = new UltrasonicDigitalSensor(8);
+            //ultraSonicSensor1 = new UltrasonicDigitalSensor(2);
+            ultraSonicSensor1 = new UltrasonicDigitalSensor(envConfig.application.port);
+            // ultraSonicSensor2 = new UltrasonicDigitalSensor(3);
+            // ultraSonicSensor3 = new UltrasonicDigitalSensor(4);
+            // ultraSonicSensor4 = new UltrasonicDigitalSensor(8);
 
-            //currently not working, due to blocking access. @Michael Kirsch
+            // currently not working, due to blocking access. @Michael Kirsch
             // ultraSonicSensor1.on('change', function (res) {
-            //     if(res > sensor1*1.10 || res < sensor1*0.9) //Interval
-            //         console.log("Sensor1 changed " + res);
-            //         sensor1 = res;
-            // });
+            //     //if (res > sensor1 * 1.10 || res < sensor1 * 0.9) { //Interval
             //
-            // ultraSonicSensor2.on('change', function (res) {
-            //     console.log("Sensor2 changed " +  res);
-            //     sensor2 = res;
-            // });
-            //
-            // ultraSonicSensor3.on('change', function (res) {
-            //     console.log("Sensor3 changed " +  res);
-            //     sensor3 = res;
-            // });
-            //
-            // ultraSonicSensor4.on('change', function (res) {
-            //     console.log("Sensor4 changed " +  res);
-            //     sensor4 = res;
+            //         if (res < 230 && res != sensor1 && res != false){
+            //             console.log("Sensor1 changed " + res);
+            //             sensor1 = res;
+            //         }
+            //     //}
             // });
 
-            // ultraSonicSensor1.watch();
-            // ultraSonicSensor2.watch();
-            // ultraSonicSensor3.watch();
-            // ultraSonicSensor4.watch();
+            sensor1 = false;
+
+            data1 = -1;
+
+
+            ultraSonicSensor1.stream(50, function (data) {
+                data1 = data;
+                if (data > 30 && data < 90) {
+                    sensor1 = true;
+                    console.log("Sensor 1 is " + data1 + ", thus it's" + sensor1);
+                }
+                else if (data < 180 && data > 20) {
+                    sensor1 = false;
+                    console.log("Sensor 1 is " + data1 + ", thus it's" + sensor1);
+                }
+
+            });
+
+            //ultraSonicSensor1.watch();
 
             console.log("Sensors configured.")
         }
     }
 });
 
+
 board.init();
 
-setInterval(function () {
-    console.log("Accessing sensors.")
-    sensor1 = Math.round(ultraSonicSensor1.read());
-    sleep.msleep(1000);
-    sensor2 = Math.round(ultraSonicSensor2.read());
-    sleep.msleep(1000);
-    sensor3 = Math.round(ultraSonicSensor3.read());
-    sleep.msleep(1000);
-    sensor4 = Math.round(ultraSonicSensor4.read());
-}, 1000);
 
 function getSensorData(req, res) {
 
-    var dataStr = [{
-        "sonicsensor1": sensor1,
-        "sonicsensor2": sensor2,
-        "sonicsensor3": sensor3,
-        "sonicsensor4": sensor4
-    }];
+    var dataStr = {
+        "sonicsensor": [{"occupied": sensor1}],
+        "sonicsensor2": [{"occupied": null}],
+        "sonicsensor3": [{"occupied": null}],
+        "sonicsensor4": [{"occupied": null}]
+    };
     console.log(dataStr);
     res.json(dataStr)
+    res.end();
 }
