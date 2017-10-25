@@ -51,7 +51,7 @@ module.exports = {
  Param 2: a handle to the response object
  */
 var ultraSonicSensor1, ultraSonicSensor2, ultraSonicSensor3, ultraSonicSensor4;
-var sensor1, sensor2, sensor3, sensor4;
+var sensor1, distance1, sensor2, sensor3, sensor4;
 var data1, data2, data3, data4;
 var avgSensor1 = 0;
 var avgSensor2 = 0;
@@ -93,11 +93,13 @@ var board = new Board({
                 data1 = data;
                 if (data > 30 && data < 90) {
                     sensor1 = true;
-                    console.log("Sensor 1 is " + data1 + ", thus it's" + sensor1);
+                    distance1 = data;
+                    console.log("Sensor 1 is " + data1 + ", thus it's " + sensor1);
                 }
                 else if (data < 180 && data > 20) {
                     sensor1 = false;
-                    console.log("Sensor 1 is " + data1 + ", thus it's" + sensor1);
+                    distance1 = data;
+                    console.log("Sensor 1 is " + data1 + ", thus it's " + sensor1);
                 }
 
             });
@@ -116,8 +118,11 @@ board.init();
 function getSensorData(req, res) {
 
     var dataStr = [{
-        "sonicSensor": [{"name": envConfig.application.sensorName}
-            , {"occupied": sensor1}]
+        "sonicSensor": [
+            {"name": envConfig.application.sensorName},
+            {"occupied": sensor1},
+            {"distance": distance1},
+            ]
     }];
     console.log(dataStr);
     res.json(dataStr);
