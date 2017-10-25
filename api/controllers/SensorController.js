@@ -120,7 +120,7 @@ function getSensorData(req, res) {
     var dataStr = [{
         "sonicSensor": [
             {"name": envConfig.application.sensorName},
-            {"occupied": sensor1},
+            {"occupied": sensor1, "distance": distance1},
             {"distance": distance1},
             ]
     }];
