@@ -52,6 +52,11 @@ module.exports = {
  */
 var ultraSonicSensor1, ultraSonicSensor2, ultraSonicSensor3, ultraSonicSensor4;
 var sensor1, sensor2, sensor3, sensor4;
+var data1, data2, data3, data4;
+var avgSensor1 = 0;
+var avgSensor2 = 0;
+var avgSensor3 = 0;
+var avgSensor4 = 0;
 
 var board = new Board({
     debug: true,
@@ -110,12 +115,12 @@ board.init();
 
 function getSensorData(req, res) {
 
-    var dataStr = {
-        "sonicsensor": [{"occupied": sensor1}],
+    var dataStr = [{
+        "sonicsensor1": [{"occupied": sensor1}],
         "sonicsensor2": [{"occupied": null}],
         "sonicsensor3": [{"occupied": null}],
         "sonicsensor4": [{"occupied": null}]
-    };
+    }];
     console.log(dataStr);
     res.json(dataStr)
     res.end();
