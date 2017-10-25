@@ -13,20 +13,23 @@
 var util = require('util');
 
 /* Add sonic sensor module */
-var GrovePi = require('node-grovepi').GrovePi
+var GrovePi = require('node-grovepi').GrovePi;
 
 var sleep = require('sleep');
 
 /* Add base classes */
-var Commands = GrovePi.commands
-var Board = GrovePi.board
+var Commands = GrovePi.commands;
+var Board = GrovePi.board;
 
 /* Access sonic sensor module */
 var UltrasonicDigitalSensor = GrovePi.sensors.UltrasonicDigital;
 var init = false;
 
-const req = require('require-yml')
-const envConfig = req('./config.yml')
+/*
+Use external config
+ */
+const req = require('require-yml');
+const envConfig = req('./config.yml');
 
 /*
  Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
@@ -50,62 +53,33 @@ module.exports = {
  Param 1: a handle to the request object
  Param 2: a handle to the response object
  */
-var ultraSonicSensor1, ultraSonicSensor2, ultraSonicSensor3, ultraSonicSensor4;
-var sensor1, distance1, sensor2, sensor3, sensor4;
-var data1, data2, data3, data4;
-var avgSensor1 = 0;
-var avgSensor2 = 0;
-var avgSensor3 = 0;
-var avgSensor4 = 0;
-
+var ultraSonicSensor;
+var occupied, distance;
 var board = new Board({
     debug: true,
     onError: function (err) {
-        console.log('Something wrong just happened')
+        console.log('Something wrong just happened while initializing the sensor');
         console.log(err)
     },
     onInit: function (response) {
         if (response) {
             console.log('GrovePi Version :: ' + board.version());
-            //ultraSonicSensor1 = new UltrasonicDigitalSensor(2);
-            ultraSonicSensor1 = new UltrasonicDigitalSensor(envConfig.application.port);
-            // ultraSonicSensor2 = new UltrasonicDigitalSensor(3);
-            // ultraSonicSensor3 = new UltrasonicDigitalSensor(4);
-            // ultraSonicSensor4 = new UltrasonicDigitalSensor(8);
+            ultraSonicSensor = new UltrasonicDigitalSensor(envConfig.application.port);
+            occupied = false;
 
-            // currently not working, due to blocking access. @Michael Kirsch
-            // ultraSonicSensor1.on('change', function (res) {
-            //     //if (res > sensor1 * 1.10 || res < sensor1 * 0.9) { //Interval
-            //
-            //         if (res < 230 && res != sensor1 && res != false){
-            //             console.log("Sensor1 changed " + res);
-            //             sensor1 = res;
-            //         }
-            //     //}
-            // });
-
-            sensor1 = false;
-
-            data1 = -1;
-
-
-            ultraSonicSensor1.stream(50, function (data) {
-                data1 = data;
+            ultraSonicSensor.stream(50, function (data) {
                 if (data > 30 && data < 90) {
-                    sensor1 = true;
-                    distance1 = data;
-                    console.log("Sensor 1 is " + data1 + ", thus it's " + sensor1);
+                    occupied = true;
+                    distance = data;
+                    console.log("Distance is " + distance + ", thus occupied is " + occupied);
                 }
                 else if (data < 180 && data > 20) {
-                    sensor1 = false;
-                    distance1 = data;
-                    console.log("Sensor 1 is " + data1 + ", thus it's " + sensor1);
+                    occupied = false;
+                    distance = data;
+                    console.log("Distance is " + distance + ", thus occupied is " + occupied);
                 }
 
             });
-
-            //ultraSonicSensor1.watch();
-
             console.log("Sensors configured.")
         }
     }
@@ -114,10 +88,9 @@ var board = new Board({
 
 board.init();
 
-
 function getSensorData(req, res) {
 
-    var dataStr =[{"name": envConfig.application.sensorName, "occupied": sensor1, "distance": distance1}];
+    var dataStr =[{"name": envConfig.application.sensorName, "occupied": occupied, "distance": distance}];
     console.log(dataStr);
     res.json(dataStr);
     res.end();
