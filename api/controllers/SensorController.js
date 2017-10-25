@@ -111,12 +111,7 @@ board.init();
 
 function getSensorData(req, res) {
 
-    var dataStr = {
-        "sonicsensor": [{"occupied": sensor1}],
-        "sonicsensor2": [{"occupied": null}],
-        "sonicsensor3": [{"occupied": null}],
-        "sonicsensor4": [{"occupied": null}]
-    };
+    var dataStr = {"sonicsensor1": {"occupied": sensor1}};
     console.log(dataStr);
     res.json(dataStr)
     res.end();
