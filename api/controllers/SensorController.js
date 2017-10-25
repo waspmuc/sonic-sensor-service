@@ -113,6 +113,6 @@ function getSensorData(req, res) {
 
     var dataStr = {"sonicsensor1": {"occupied": true}};
     console.log(dataStr);
-    res.json(dataStr)
+    res.json("");
     res.end();
 }
