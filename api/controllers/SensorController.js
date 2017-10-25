@@ -23,7 +23,6 @@ var Board = GrovePi.board;
 
 /* Access sonic sensor module */
 var UltrasonicDigitalSensor = GrovePi.sensors.UltrasonicDigital;
-var init = false;
 
 /*
 Use external config
