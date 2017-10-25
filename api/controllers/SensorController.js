@@ -118,11 +118,7 @@ board.init();
 function getSensorData(req, res) {
 
     var dataStr = [{
-        "sonicSensor": [
-            {"name": envConfig.application.sensorName},
-            {"occupied": sensor1, "distance": distance1},
-            {"distance": distance1},
-            ]
+        "sonicSensor": [{"name": envConfig.application.sensorName, "occupied": sensor1, "distance": distance1}]
     }];
     console.log(dataStr);
     res.json(dataStr);
