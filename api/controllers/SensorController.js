@@ -115,7 +115,8 @@ board.init();
 
 function getSensorData(req, res) {
 
-    var dataStr = [{"sonicsensor1": [{"occupied": sensor1}]}];
+    var serviceName = envConfig.application.sensorName;
+    var dataStr = [{serviceName: [{"occupied": sensor1}]}];
     console.log(dataStr);
     res.json(dataStr)
     res.end();
