@@ -50,69 +50,73 @@ module.exports = {
  Param 1: a handle to the request object
  Param 2: a handle to the response object
  */
-var ultraSonicSensor1;
-var sensor1;
-var data1;
-//
-// var board = new Board({
-//     debug: true,
-//     onError: function (err) {
-//         console.log('Something wrong just happened')
-//         console.log(err)
-//     },
-//     onInit: function (response) {
-//         if (response) {
-//             console.log('GrovePi Version :: ' + board.version());
-//             //ultraSonicSensor1 = new UltrasonicDigitalSensor(2);
-//             ultraSonicSensor1 = new UltrasonicDigitalSensor(envConfig.application.port);
-//             // ultraSonicSensor2 = new UltrasonicDigitalSensor(3);
-//             // ultraSonicSensor3 = new UltrasonicDigitalSensor(4);
-//             // ultraSonicSensor4 = new UltrasonicDigitalSensor(8);
-//
-//             // currently not working, due to blocking access. @Michael Kirsch
-//             // ultraSonicSensor1.on('change', function (res) {
-//             //     //if (res > sensor1 * 1.10 || res < sensor1 * 0.9) { //Interval
-//             //
-//             //         if (res < 230 && res != sensor1 && res != false){
-//             //             console.log("Sensor1 changed " + res);
-//             //             sensor1 = res;
-//             //         }
-//             //     //}
-//             // });
-//
-//             sensor1 = false;
-//
-//             data1 = -1;
-//
-//
-//             ultraSonicSensor1.stream(50, function (data) {
-//                 data1 = data;
-//                 if (data > 30 && data < 90) {
-//                     sensor1 = true;
-//                     console.log("Sensor 1 is " + data1 + ", thus it's" + sensor1);
-//                 }
-//                 else if (data < 180 && data > 20) {
-//                     sensor1 = false;
-//                     console.log("Sensor 1 is " + data1 + ", thus it's" + sensor1);
-//                 }
-//
-//             });
-//
-//             //ultraSonicSensor1.watch();
-//
-//             console.log("Sensors configured.")
-//         }
-//     }
-// });
-//
-//
-// board.init();
+var ultraSonicSensor1, ultraSonicSensor2, ultraSonicSensor3, ultraSonicSensor4;
+var sensor1, sensor2, sensor3, sensor4;
+
+var board = new Board({
+    debug: true,
+    onError: function (err) {
+        console.log('Something wrong just happened')
+        console.log(err)
+    },
+    onInit: function (response) {
+        if (response) {
+            console.log('GrovePi Version :: ' + board.version());
+            //ultraSonicSensor1 = new UltrasonicDigitalSensor(2);
+            ultraSonicSensor1 = new UltrasonicDigitalSensor(envConfig.application.port);
+            // ultraSonicSensor2 = new UltrasonicDigitalSensor(3);
+            // ultraSonicSensor3 = new UltrasonicDigitalSensor(4);
+            // ultraSonicSensor4 = new UltrasonicDigitalSensor(8);
+
+            // currently not working, due to blocking access. @Michael Kirsch
+            // ultraSonicSensor1.on('change', function (res) {
+            //     //if (res > sensor1 * 1.10 || res < sensor1 * 0.9) { //Interval
+            //
+            //         if (res < 230 && res != sensor1 && res != false){
+            //             console.log("Sensor1 changed " + res);
+            //             sensor1 = res;
+            //         }
+            //     //}
+            // });
+
+            sensor1 = false;
+
+            data1 = -1;
+
+
+            ultraSonicSensor1.stream(50, function (data) {
+                data1 = data;
+                if (data > 30 && data < 90) {
+                    sensor1 = true;
+                    console.log("Sensor 1 is " + data1 + ", thus it's" + sensor1);
+                }
+                else if (data < 180 && data > 20) {
+                    sensor1 = false;
+                    console.log("Sensor 1 is " + data1 + ", thus it's" + sensor1);
+                }
+
+            });
+
+            //ultraSonicSensor1.watch();
+
+            console.log("Sensors configured.")
+        }
+    }
+});
+
+
+board.init();
 
 
 function getSensorData(req, res) {
 
-    var dataStr = {"sonicsensor1": {"occupied": true}};
+    var dataStr = {
+        "sonicsensor": [{"occupied": sensor1}],
+        "sonicsensor2": [{"occupied": null}],
+        "sonicsensor3": [{"occupied": null}],
+        "sonicsensor4": [{"occupied": null}]
+    };
     console.log(dataStr);
-    res.json("");
+    res.json(dataStr)
     res.end();
 }
