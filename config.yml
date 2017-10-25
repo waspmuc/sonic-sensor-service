@@ -1,0 +1,4 @@
+application:
+  port: 10020
+  sensorName: sonic-sensor-1
+  sensorPort: 2

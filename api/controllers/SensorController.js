@@ -17,8 +17,6 @@ var GrovePi = require('node-grovepi').GrovePi
 
 var sleep = require('sleep');
 
-var Worker = require('webworker-threads').Worker;
-
 /* Add base classes */
 var Commands = GrovePi.commands
 var Board = GrovePi.board
