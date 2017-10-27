@@ -66,7 +66,7 @@ var board = new Board({
             ultraSonicSensor = new UltrasonicDigitalSensor(envConfig.application.port);
             occupied = false;
 
-            ultraSonicSensor.stream(50, function (data) {
+            ultraSonicSensor.stream(envConfig.sensor.delay, function (data) {
                 if (data > 30 && data < 90) {
                     occupied = true;
                     distance = data;
