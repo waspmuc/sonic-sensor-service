@@ -65,7 +65,7 @@ var board = new Board({
             console.log('GrovePi Version :: ' + board.version());
             ultraSonicSensor = new UltrasonicDigitalSensor(envConfig.application.port);
             occupied = false;
-            ultraSonicSensor.stream(envConfig.sensor.delay, function (data) {
+            ultraSonicSensor.stream(envConfig.sensor.delay || 500, function (data) {
                 if (data > 30 && data < 90) {
                     occupied = true;
                     distance = data;
